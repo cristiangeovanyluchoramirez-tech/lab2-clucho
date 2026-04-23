@@ -11,7 +11,15 @@ package com.mycompany.lab2clucho;
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
+// Usuarios válidos del sistema
+private int intentos = 0;
+private static final int MAX_INTENTOS = 3;
 
+private static final String[][] USUARIOS = {
+    {"admin@empresa.com",    "Admin@1234567"},
+    {"usuario@empresa.com",  "Usuario#9876543"},
+    {"gerente@empresa.com",  "Gerente$2024xYz"}
+};
     /**
      * Creates new form Login
      */
@@ -64,7 +72,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 2, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Welcome to the ");
+        jLabel1.setText("WELCOME ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,7 +137,51 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    if (intentos >= MAX_INTENTOS) return;
+
+    String usuario    = jTextField1.getText().trim();
+    String contrasena = new String(jPasswordField1.getPassword());
+
+    if (usuario.isEmpty() || contrasena.isEmpty()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Por favor complete todos los campos.", "Aviso",
+            javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    boolean credencialesOk = false;
+    for (String[] u : USUARIOS) {
+        if (u[0].equals(usuario) && u[1].equals(contrasena)) {
+            credencialesOk = true;
+            break;
+        }
+    }
+
+    if (credencialesOk) {
+        intentos = 0;
+        this.setVisible(false);
+        MenuPrincipal menu = new MenuPrincipal(this);
+        menu.setVisible(true);
+    } else {
+        intentos++;
+        int restantes = MAX_INTENTOS - intentos;
+        if (intentos >= MAX_INTENTOS) {
+            jButton1.setEnabled(false);
+            jTextField1.setEnabled(false);
+            jPasswordField1.setEnabled(false);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "CUENTA BLOQUEADA.\nDemasiados intentos fallidos.",
+                "Acceso Bloqueado", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                "Credenciales incorrectas.\nIntentos restantes: " + restantes,
+                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            jPasswordField1.setText("");
+            jPasswordField1.requestFocus();
+        }
+    }
+}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -156,7 +208,16 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
-
+    
+public void mostrar() {
+    intentos = 0;
+    jTextField1.setText("");
+    jPasswordField1.setText("");
+    jButton1.setEnabled(true);
+    jTextField1.setEnabled(true);
+    jPasswordField1.setEnabled(true);
+    this.setVisible(true);
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
