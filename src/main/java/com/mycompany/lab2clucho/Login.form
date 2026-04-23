@@ -141,7 +141,7 @@
               <Font name="Yu Gothic UI Semilight" size="12" style="2"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Welcome to the menu"/>
+            <Property name="text" type="java.lang.String" value="Welcome to the "/>
           </Properties>
         </Component>
       </SubComponents>
