@@ -15,8 +15,8 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         this.usuarioActual = usuario;
         initComponents();
         setLocationRelativeTo(null);
-        setTitle("Menú Principal - " + usuario.getNombre() 
-                 + " [" + usuario.getRol() + "]");
+        setTitle("Main Menu - " + usuario.getNombre() 
+         + " [" + usuario.getRol() + "]");
     }
 
     @SuppressWarnings("unchecked")
@@ -31,9 +31,9 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // ── Menú Gestión ──────────────────────────────────────────
-        jMenuGestion.setText("Gestión");
+        jMenuGestion.setText("Management");
 
-        jMenuItemMant.setText("Mantenimiento de Usuarios");
+        jMenuItemMant.setText("User Maintenance");
         jMenuItemMant.addActionListener(e -> {
             MantenimientoUsuarios mu = 
                 new MantenimientoUsuarios(controller, usuarioActual);
@@ -42,8 +42,8 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         jMenuGestion.add(jMenuItemMant);
 
         // ── Menú Cerrar Sesión ─────────────────────────────────────
-        jMenuSesion.setText("Cerrar Sesión");
-        jMenuItemCerrar.setText("Salir");
+        jMenuSesion.setText("Log Out");
+        jMenuItemCerrar.setText("Exit");
         jMenuItemCerrar.addActionListener(e -> cerrarSesion());
         jMenuSesion.add(jMenuItemCerrar);
 
@@ -54,7 +54,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
         // ── Label central ──────────────────────────────────────────
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Bienvenido, " + usuarioActual.getNombre());
+        jLabel1.setText("Welcome, " + usuarioActual.getNombre());
 
         javax.swing.GroupLayout layout = 
             new javax.swing.GroupLayout(getContentPane());
@@ -75,7 +75,7 @@ public class MenuPrincipalView extends javax.swing.JFrame {
 
     private void cerrarSesion() {
         int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
-            "¿Desea cerrar sesión?", "Confirmar",
+            "Are you sure you want to log out?", "Confirm",
             javax.swing.JOptionPane.YES_NO_OPTION);
         if (confirm == javax.swing.JOptionPane.YES_OPTION) {
             this.dispose();
