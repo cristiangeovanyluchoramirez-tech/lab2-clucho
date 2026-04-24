@@ -4,6 +4,8 @@
  */
 package com.mycompany.lab2clucho;
 
+import com.mycompany.lab2clucho.controller.UserControlle;
+
 /**
  *
  * @author umg
@@ -12,6 +14,9 @@ public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
 // Usuarios válidos del sistema
+    private final com.mycompany.lab2clucho.controller.UserControlle controller =
+        new com.mycompany.lab2clucho.controller.UserControlle();
+    
 private int intentos = 0;
 private static final int MAX_INTENTOS = 3;
 
@@ -137,51 +142,50 @@ private static final String[][] USUARIOS = {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-    if (intentos >= MAX_INTENTOS) return;
+        if (intentos >= MAX_INTENTOS) return;
 
-    String usuario    = jTextField1.getText().trim();
-    String contrasena = new String(jPasswordField1.getPassword());
+        String usuario    = jTextField1.getText().trim();
+        String contrasena = new String(jPasswordField1.getPassword());
 
-    if (usuario.isEmpty() || contrasena.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "Por favor complete todos los campos.", "Aviso",
-            javax.swing.JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-
-    boolean credencialesOk = false;
-    for (String[] u : USUARIOS) {
-        if (u[0].equals(usuario) && u[1].equals(contrasena)) {
-            credencialesOk = true;
-            break;
-        }
-    }
-
-    if (credencialesOk) {
-        intentos = 0;
-        this.setVisible(false);
-        MenuPrincipal menu = new MenuPrincipal(this);
-        menu.setVisible(true);
-    } else {
-        intentos++;
-        int restantes = MAX_INTENTOS - intentos;
-        if (intentos >= MAX_INTENTOS) {
-            jButton1.setEnabled(false);
-            jTextField1.setEnabled(false);
-            jPasswordField1.setEnabled(false);
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this,
-                "CUENTA BLOQUEADA.\nDemasiados intentos fallidos.",
-                "Acceso Bloqueado", javax.swing.JOptionPane.ERROR_MESSAGE);
+                "Por favor complete todos los campos.", "Aviso",
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Buscar en el UserController (fuente única de verdad)
+        com.mycompany.lab2clucho.controller.UserControlle.Usuario encontrado = null;
+        for (com.mycompany.lab2clucho.controller.UserControlle.Usuario u : controller.listarTodos()) {
+            if (u.getEmail().equals(usuario) && u.getClave().equals(contrasena) && u.isActivo()) {
+                encontrado = u;
+                break;
+            }
+        }
+
+        if (encontrado != null) {
+            intentos = 0;
+            this.setVisible(false);
+            MenuPrincipalView menu = new MenuPrincipalView(this, controller, encontrado);
+            menu.setVisible(true);
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                "Credenciales incorrectas.\nIntentos restantes: " + restantes,
-                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            jPasswordField1.setText("");
-            jPasswordField1.requestFocus();
+            intentos++;
+            int restantes = MAX_INTENTOS - intentos;
+            if (intentos >= MAX_INTENTOS) {
+                jButton1.setEnabled(false);
+                jTextField1.setEnabled(false);
+                jPasswordField1.setEnabled(false);
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "CUENTA BLOQUEADA.\nDemasiados intentos fallidos.",
+                    "Acceso Bloqueado", javax.swing.JOptionPane.ERROR_MESSAGE);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                    "Credenciales incorrectas.\nIntentos restantes: " + restantes,
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                jPasswordField1.setText("");
+                jPasswordField1.requestFocus();
+            }
         }
-    }
-}
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
